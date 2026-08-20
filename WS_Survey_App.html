@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sample pH Entry</title>
+<style>
+  :root {
+    --deep: #0d2b3e;
+    --teal: #1b6b7a;
+    --teal-light: #4fa9b8;
+    --sand: #f6f3ec;
+    --ink: #14232b;
+    --warn: #b5482a;
+    --ok: #2e7d5b;
+    --line: #d8d2c4;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+  }
+  header {
+    background: var(--deep);
+    color: white;
+    padding: 20px 16px;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 0.02em;
+  }
+  header p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #a9c2cc;
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--teal);
+    margin: 0 0 12px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--ink);
+  }
+  input[type="text"], input[type="number"], input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--sand);
+  }
+  input:focus {
+    outline: 2px solid var(--teal-light);
+    outline-offset: 1px;
+  }
+  .name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .sample {
+    border-top: 1px solid var(--line);
+    padding: 14px 0;
+  }
+  .sample:first-child { border-top: none; padding-top: 0; }
+  .sample-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .sample-meta {
+    font-size: 12px;
+    color: #6b7a80;
+    margin-bottom: 10px;
+  }
+  .ph-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .ph-row:last-child { margin-bottom: 0; }
+  .not-collected {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    color: #6b7a80;
+  }
+  .not-collected input { width: auto; }
+  input:disabled {
+    background: #ececec;
+    color: #999;
+  }
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  #signInBtn {
+    background: var(--teal);
+    color: white;
+  }
+  #submitBtn {
+    background: var(--teal);
+    color: white;
+  }
+  #submitBtn:disabled {
+    background: #b7c4c7;
+    cursor: not-allowed;
+  }
+  .status {
+    margin-top: 12px;
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+  .status.info { background: #eef4f5; color: var(--teal); }
+  .status.error { background: #fbeae5; color: var(--warn); }
+  .status.success { background: #e8f4ee; color: var(--ok); }
+  .hidden { display: none !important; }
+  .signed-in-badge {
+    font-size: 12px;
+    color: var(--ok);
+    margin-bottom: 12px;
+  }
+  details {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #6b7a80;
+  }
+  summary { cursor: pointer; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Sample pH Entry</h1>
+  <p>Upload a sample CSV, enter pH per sample, submit directly to the map.</p>
+</header>
+
+<main>
+
+  <!-- SIGN IN -->
+  <div class="card" id="signInCard">
+    <h2>1. Sign in</h2>
+    <button id="signInBtn">Sign in with ArcGIS Online</button>
+    <details>
+      <summary>Advanced: paste an access token instead</summary>
+      <label for="manualToken" style="margin-top:8px;">Access token</label>
+      <input type="text" id="manualToken" placeholder="Paste token here" />
+      <button id="useManualTokenBtn" style="margin-top:8px; background:#6b7a80;">Use this token</button>
+    </details>
+  </div>
+
+  <!-- FORM (hidden until signed in) -->
+  <div id="formArea" class="hidden">
+
+    <div class="card">
+      <div class="signed-in-badge" id="signedInBadge">Signed in</div>
+      <h2>2. Who's submitting</h2>
+      <div class="name-row">
+        <div>
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" />
+        </div>
+        <div>
+          <label for="lastName">Last name</label>
+          <input type="text" id="lastName" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3. Upload sample CSV</h2>
+      <input type="file" id="csvFile" accept=".csv" />
+    </div>
+
+    <div class="card hidden" id="samplesCard">
+      <h2>4. pH per sample</h2>
+      <div id="samplesContainer"></div>
+    </div>
+
+    <div class="card hidden" id="submitCard">
+      <button id="submitBtn" disabled>Submit to map</button>
+      <div id="statusBox"></div>
+    </div>
+
+  </div>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>
+/* =========================================================================
+   CONFIG — edit these three values for your organization before using
+   ========================================================================= */
+const CONFIG = {
+  // Your ArcGIS Online organization's portal URL
+  PORTAL_URL: "https://www.arcgis.com",
+
+  // The Client ID of the "Application" item you register in ArcGIS Online
+  // (Content > New Item > Application. See setup instructions provided separately.)
+  CLIENT_ID: "REPLACE_WITH_YOUR_APP_CLIENT_ID",
+
+  // Your master hosted feature layer's REST endpoint, including the layer index.
+  // Example: https://services1.arcgis.com/XXXXXXXX/arcgis/rest/services/FieldTemperatureMaster/FeatureServer/0
+  MASTER_LAYER_URL: "REPLACE_WITH_YOUR_MASTER_LAYER_FEATURESERVER_URL/0",
+
+  // CSV column names -> must match your device's CSV headers exactly
+  CSV_FIELDS: {
+    count: "Count",
+    date: "Date",
+    time: "Time_EST",
+    lat: "Lat",
+    long: "Long",
+    surfaceTemp: "SurfaceTemp_C",
+    depthTemp: "DepthTemp_C"
+  },
+
+  // Target field names in your MASTER LAYER (add these fields to the layer if missing)
+  TARGET_FIELDS: {
+    count: "Count",
+    date: "Date",
+    time: "Time_EST",
+    surfaceTemp: "SurfaceTemp_C",
+    depthTemp: "DepthTemp_C",
+    surfacePH: "SurfacePH",
+    depthPH: "DepthPH",
+    firstName: "FirstName",
+    lastName: "LastName"
+  }
+};
+/* ========================================================================= */
+
+let accessToken = null;
+let parsedRows = [];
+
+const redirectUri = window.location.origin + window.location.pathname;
+
+/* ---------------- AUTH: OAuth 2.0 implicit sign-in ---------------- */
+
+function signIn() {
+  const authUrl = `${CONFIG.PORTAL_URL}/sharing/rest/oauth2/authorize` +
+    `?client_id=${encodeURIComponent(CONFIG.CLIENT_ID)}` +
+    `&response_type=token` +
+    `&expiration=1440` +
+    `&redirect_uri=${encodeURIComponent(redirectUri)}`;
+  window.location.href = authUrl;
+}
+
+function checkForTokenInUrl() {
+  if (window.location.hash && window.location.hash.includes("access_token")) {
+    const params = new URLSearchParams(window.location.hash.substring(1));
+    const token = params.get("access_token");
+    if (token) {
+      accessToken = token;
+      history.replaceState(null, "", window.location.pathname);
+      onSignedIn();
+    }
+  }
+}
+
+function onSignedIn() {
+  document.getElementById("signInCard").classList.add("hidden");
+  document.getElementById("formArea").classList.remove("hidden");
+  document.getElementById("signedInBadge").textContent = "Signed in \u2713";
+}
+
+document.getElementById("signInBtn").addEventListener("click", signIn);
+
+document.getElementById("useManualTokenBtn").addEventListener("click", () => {
+  const t = document.getElementById("manualToken").value.trim();
+  if (t) {
+    accessToken = t;
+    onSignedIn();
+  }
+});
+
+checkForTokenInUrl();
+
+/* ---------------- CSV parsing + dynamic sample inputs ---------------- */
+
+document.getElementById("csvFile").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  Papa.parse(file, {
+    header: true,
+    skipEmptyLines: true,
+    dynamicTyping: true,
+    complete: (results) => {
+      parsedRows = results.data;
+      renderSampleInputs(parsedRows);
+    },
+    error: (err) => {
+      showStatus("Could not read that CSV: " + err.message, "error");
+    }
+  });
+});
+
+function renderSampleInputs(rows) {
+  const container = document.getElementById("samplesContainer");
+  container.innerHTML = "";
+
+  const f = CONFIG.CSV_FIELDS;
+
+  rows.forEach((row, idx) => {
+    const sampleNum = row[f.count];
+    const div = document.createElement("div");
+    div.className = "sample";
+    div.dataset.index = idx;
+
+    div.innerHTML = `
+      <div class="sample-title">Sample ${sampleNum}</div>
+      <div class="sample-meta">${row[f.date] || ""} ${row[f.time] || ""} &middot; Surface ${row[f.surfaceTemp] ?? "—"}°C / Depth ${row[f.depthTemp] ?? "—"}°C</div>
+
+      <div class="ph-row">
+        <input type="number" step="0.01" min="0" max="14" placeholder="Surface pH for sample ${sampleNum}" data-role="surfacePH" data-index="${idx}" />
+        <label class="not-collected">
+          <input type="checkbox" data-role="surfaceNotCollected" data-index="${idx}" />
+          Not collected
+        </label>
+      </div>
+
+      <div class="ph-row">
+        <input type="number" step="0.01" min="0" max="14" placeholder="Depth pH for sample ${sampleNum}" data-role="depthPH" data-index="${idx}" />
+        <label class="not-collected">
+          <input type="checkbox" data-role="depthNotCollected" data-index="${idx}" />
+          Not collected
+        </label>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  document.getElementById("samplesCard").classList.remove("hidden");
+  document.getElementById("submitCard").classList.remove("hidden");
+  wireValidation();
+  validateForm();
+}
+
+/* ---------------- Validation ---------------- */
+
+function wireValidation() {
+  document.querySelectorAll('[data-role="surfaceNotCollected"]').forEach((cb) => {
+    cb.addEventListener("change", (e) => {
+      const idx = e.target.dataset.index;
+      const input = document.querySelector(`[data-role="surfacePH"][data-index="${idx}"]`);
+      input.disabled = e.target.checked;
+      if (e.target.checked) input.value = "";
+      validateForm();
+    });
+  });
+  document.querySelectorAll('[data-role="depthNotCollected"]').forEach((cb) => {
+    cb.addEventListener("change", (e) => {
+      const idx = e.target.dataset.index;
+      const input = document.querySelector(`[data-role="depthPH"][data-index="${idx}"]`);
+      input.disabled = e.target.checked;
+      if (e.target.checked) input.value = "";
+      validateForm();
+    });
+  });
+  document.querySelectorAll('input[data-role="surfacePH"], input[data-role="depthPH"]').forEach((inp) => {
+    inp.addEventListener("input", validateForm);
+  });
+  document.getElementById("firstName").addEventListener("input", validateForm);
+  document.getElementById("lastName").addEventListener("input", validateForm);
+}
+
+function validateForm() {
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+
+  let allSamplesValid = parsedRows.length > 0;
+
+  parsedRows.forEach((_, idx) => {
+    const surfaceInput = document.querySelector(`[data-role="surfacePH"][data-index="${idx}"]`);
+    const surfaceSkip = document.querySelector(`[data-role="surfaceNotCollected"][data-index="${idx}"]`);
+    const depthInput = document.querySelector(`[data-role="depthPH"][data-index="${idx}"]`);
+    const depthSkip = document.querySelector(`[data-role="depthNotCollected"][data-index="${idx}"]`);
+
+    const surfaceOk = surfaceSkip.checked || surfaceInput.value !== "";
+    const depthOk = depthSkip.checked || depthInput.value !== "";
+
+    if (!surfaceOk || !depthOk) allSamplesValid = false;
+  });
+
+  const valid = firstName && lastName && allSamplesValid;
+  document.getElementById("submitBtn").disabled = !valid;
+  return valid;
+}
+
+/* ---------------- Submit to master layer ---------------- */
+
+document.getElementById("submitBtn").addEventListener("click", submitToLayer);
+
+async function submitToLayer() {
+  if (!validateForm()) return;
+  if (!accessToken) {
+    showStatus("You're not signed in.", "error");
+    return;
+  }
+
+  const firstName = document.getElementById("firstName").value.trim();
+  const lastName = document.getElementById("lastName").value.trim();
+  const csvF = CONFIG.CSV_FIELDS;
+  const tgt = CONFIG.TARGET_FIELDS;
+
+  const features = parsedRows.map((row, idx) => {
+    const surfaceInput = document.querySelector(`[data-role="surfacePH"][data-index="${idx}"]`);
+    const depthInput = document.querySelector(`[data-role="depthPH"][data-index="${idx}"]`);
+
+    const surfacePH = surfaceInput.disabled ? null : parseFloat(surfaceInput.value);
+    const depthPH = depthInput.disabled ? null : parseFloat(depthInput.value);
+
+    return {
+      geometry: {
+        x: parseFloat(row[csvF.long]),
+        y: parseFloat(row[csvF.lat]),
+        spatialReference: { wkid: 4326 }
+      },
+      attributes: {
+        [tgt.count]: row[csvF.count],
+        [tgt.date]: row[csvF.date],
+        [tgt.time]: row[csvF.time],
+        [tgt.surfaceTemp]: row[csvF.surfaceTemp],
+        [tgt.depthTemp]: row[csvF.depthTemp],
+        [tgt.surfacePH]: surfacePH,
+        [tgt.depthPH]: depthPH,
+        [tgt.firstName]: firstName,
+        [tgt.lastName]: lastName
+      }
+    };
+  });
+
+  showStatus("Submitting " + features.length + " sample(s)...", "info");
+  document.getElementById("submitBtn").disabled = true;
+
+  try {
+    const resp = await fetch(`${CONFIG.MASTER_LAYER_URL}/addFeatures`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        f: "json",
+        token: accessToken,
+        features: JSON.stringify(features)
+      })
+    });
+
+    const data = await resp.json();
+
+    if (data.error) {
+      showStatus("Server error: " + data.error.message, "error");
+      document.getElementById("submitBtn").disabled = false;
+      return;
+    }
+
+    const failed = (data.addResults || []).filter((r) => !r.success);
+    if (failed.length > 0) {
+      showStatus(`Added ${data.addResults.length - failed.length} of ${data.addResults.length}. ${failed.length} failed — check field names in CONFIG match your layer.`, "error");
+    } else {
+      showStatus(`All ${data.addResults.length} samples added successfully.`, "success");
+      resetForm();
+    }
+  } catch (err) {
+    showStatus("Network error: " + err.message, "error");
+    document.getElementById("submitBtn").disabled = false;
+  }
+}
+
+function showStatus(msg, type) {
+  const box = document.getElementById("statusBox");
+  box.innerHTML = `<div class="status ${type}">${msg}</div>`;
+}
+
+function resetForm() {
+  parsedRows = [];
+  document.getElementById("csvFile").value = "";
+  document.getElementById("samplesContainer").innerHTML = "";
+  document.getElementById("samplesCard").classList.add("hidden");
+  document.getElementById("submitBtn").disabled = true;
+}
+</script>
+
+</body>
+</html>

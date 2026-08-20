@@ -229,16 +229,20 @@ function yyyymmddFromDateInput(isoDate) {
   return isoDate.replace(/-/g, "");
 }
 
-// Converts an M/D/YYYY (or M-D-YYYY / M/D/YY) string from the CSV into an
-// epoch-millisecond timestamp at UTC midnight, which is what ArcGIS Date
-// fields expect. Without this, AGOL silently stores the field as null.
-function csvDateToEpochUTC(dateStr) {
+// Converts an M/D/YYYY (or M-D-YYYY / M/D/YY) string from the CSV into the
+// "YYYY-MM-DD" string format that ArcGIS "Date Only" fields expect.
+// (Regular Date fields want epoch-ms; Date Only fields want this plain
+// string with no time/timezone component — sending the wrong shape is why
+// AGOL was silently storing the field as null.)
+function csvDateToDateOnlyString(dateStr) {
   if (!dateStr) return null;
   const parts = String(dateStr).split(/[\/\-]/).map(p => p.trim());
   if (parts.length !== 3) return null;
   let [m, d, y] = parts;
   if (y.length === 2) y = "20" + y;
-  return Date.UTC(parseInt(y, 10), parseInt(m, 10) - 1, parseInt(d, 10));
+  m = m.padStart(2, "0");
+  d = d.padStart(2, "0");
+  return `${y}-${m}-${d}`;
 }
 
 /* =========================================================================
@@ -385,7 +389,7 @@ async function submitFieldData() {
       geometry: { x: parseFloat(row[csvF.long]), y: parseFloat(row[csvF.lat]), spatialReference: { wkid: 4326 } },
       attributes: {
         [tgt.count]: row[csvF.count],
-        [tgt.date]: csvDateToEpochUTC(row[csvF.date]),
+        [tgt.date]: csvDateToDateOnlyString(row[csvF.date]),
         [tgt.time]: row[csvF.time],
         [tgt.lat]: row[csvF.lat],
         [tgt.long]: row[csvF.long],

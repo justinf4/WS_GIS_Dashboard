@@ -6,50 +6,251 @@
 <title>Water Sampler Dashboard</title>
 <style>
   :root {
-    --deep: #0d2b3e; --teal: #1b6b7a; --teal-light: #4fa9b8;
-    --sand: #f6f3ec; --ink: #14232b; --warn: #b5482a; --ok: #2e7d5b; --line: #d8d2c4;
+    --deep: #0d2b3e;
+    --teal: #1b6b7a;
+    --teal-light: #4fa9b8;
+    --sand: #f6f3ec;
+    --ink: #14232b;
+    --warn: #b5482a;
+    --ok: #2e7d5b;
+    --line: #d8d2c4;
   }
+
   * { box-sizing: border-box; }
-  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--sand); color:var(--ink); }
-  header { background:var(--deep); color:white; padding:20px 16px; }
-  header h1 { margin:0; font-size:20px; }
-  header p { margin:4px 0 0; font-size:13px; color:#a9c2cc; }
-  main { max-width:640px; margin:0 auto; padding:16px; }
-  .card { background:white; border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:16px; }
-  .card h2 { font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--teal); margin:0 0 12px; }
-  label { display:block; font-size:13px; font-weight:600; margin:10px 0 4px; }
-  label:first-child { margin-top:0; }
-  input[type="text"], input[type="number"], input[type="file"], input[type="date"], select, textarea {
-    width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; font-size:16px; background:var(--sand); font-family:inherit;
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--sand);
+    color: var(--ink);
   }
-  textarea { resize:vertical; min-height:60px; }
-  input:focus, select:focus, textarea:focus { outline:2px solid var(--teal-light); outline-offset:1px; }
-  .name-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .sample { border-top:1px solid var(--line); padding:14px 0; }
-  .sample:first-child { border-top:none; padding-top:0; }
-  .sample-title { font-weight:700; font-size:15px; margin-bottom:8px; }
-  .sample-meta { font-size:12px; color:#6b7a80; margin-bottom:10px; }
-  .ph-row { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; margin-bottom:10px; }
-  .not-collected { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; white-space:nowrap; color:#6b7a80; }
-  .not-collected input { width:auto; }
-  input:disabled, select:disabled { background:#ececec; color:#999; }
-  button { width:100%; padding:14px; border:none; border-radius:8px; font-size:16px; font-weight:700; cursor:pointer; margin-top:8px; }
-  .btn-primary { background:var(--teal); color:white; }
-  .btn-secondary { background:#6b7a80; color:white; }
-  .btn-primary:disabled { background:#b7c4c7; cursor:not-allowed; }
-  .status { margin-top:12px; font-size:13px; padding:10px 12px; border-radius:8px; }
-  .status.info { background:#eef4f5; color:var(--teal); }
-  .status.error { background:#fbeae5; color:var(--warn); }
-  .status.success { background:#e8f4ee; color:var(--ok); }
-  .hidden { display:none !important; }
-  .signed-in-badge { font-size:12px; color:var(--ok); margin-bottom:12px; }
-  .back-link { background:none; color:var(--teal); text-align:left; padding:0; width:auto; font-weight:600; margin-bottom:8px; }
-  .lookup-results { font-size:13px; margin-top:10px; }
-  .lookup-row { border-top:1px solid var(--line); padding:6px 0; }
-  .checkbox-row { display:flex; align-items:center; gap:8px; margin:8px 0; font-size:13px; font-weight:500; }
-  .checkbox-row input { width:auto; }
+
+  header {
+    background: var(--deep);
+    color: white;
+    padding: 20px 16px;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  header p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: #a9c2cc;
+  }
+
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  .card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .card h2 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--teal);
+    margin: 0 0 12px;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 10px 0 4px;
+  }
+
+  label:first-child {
+    margin-top: 0;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="file"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-size: 16px;
+    background: var(--sand);
+    font-family: inherit;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: 2px solid var(--teal-light);
+    outline-offset: 1px;
+  }
+
+  .name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .sample {
+    border-top: 1px solid var(--line);
+    padding: 14px 0;
+  }
+
+  .sample:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .sample-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .sample-meta {
+    font-size: 12px;
+    color: #6b7a80;
+    margin-bottom: 10px;
+  }
+
+  .ph-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .not-collected {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    color: #6b7a80;
+  }
+
+  .not-collected input {
+    width: auto;
+  }
+
+  input:disabled,
+  select:disabled {
+    background: #ececec;
+    color: #999;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .btn-primary {
+    background: var(--teal);
+    color: white;
+  }
+
+  .btn-secondary {
+    background: #6b7a80;
+    color: white;
+  }
+
+  .btn-primary:disabled {
+    background: #b7c4c7;
+    cursor: not-allowed;
+  }
+
+  .status {
+    margin-top: 12px;
+    font-size: 13px;
+    padding: 10px 12px;
+    border-radius: 8px;
+  }
+
+  .status.info {
+    background: #eef4f5;
+    color: var(--teal);
+  }
+
+  .status.error {
+    background: #fbeae5;
+    color: var(--warn);
+  }
+
+  .status.success {
+    background: #e8f4ee;
+    color: var(--ok);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .signed-in-badge {
+    font-size: 12px;
+    color: var(--ok);
+    margin-bottom: 12px;
+  }
+
+  .back-link {
+    background: none;
+    color: var(--teal);
+    text-align: left;
+    padding: 0;
+    width: auto;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .lookup-results {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  .lookup-row {
+    border-top: 1px solid var(--line);
+    padding: 6px 0;
+  }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .checkbox-row input {
+    width: auto;
+  }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -62,28 +263,48 @@
   <!-- SIGN IN -->
   <div class="card" id="signInCard">
     <h2>Sign in</h2>
-    <button class="btn-primary" id="signInBtn">Sign in with ArcGIS Online</button>
+    <button class="btn-primary" id="signInBtn">
+      Sign in with ArcGIS Online
+    </button>
   </div>
 
   <!-- LANDING -->
   <div id="landingArea" class="hidden">
     <div class="card">
       <div class="signed-in-badge">Signed in ✓</div>
+
       <h2>What are you entering?</h2>
-      <button class="btn-primary" id="goFieldBtn">Field Data Entry</button>
-      <button class="btn-secondary" id="goLabBtn">Lab Data Entry</button>
+
+      <button class="btn-primary" id="goFieldBtn">
+        Field Data Entry
+      </button>
+
+      <button class="btn-secondary" id="goLabBtn">
+        Lab Data Entry
+      </button>
     </div>
   </div>
 
   <!-- FIELD DATA ENTRY -->
   <div id="fieldArea" class="hidden">
-    <button class="back-link" data-back="field">&larr; Back</button>
+
+    <button class="back-link" data-back="field">
+      &larr; Back
+    </button>
 
     <div class="card">
       <h2>Who's submitting</h2>
+
       <div class="name-row">
-        <div><label for="firstName">First name</label><input type="text" id="firstName" /></div>
-        <div><label for="lastName">Last name</label><input type="text" id="lastName" /></div>
+        <div>
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" />
+        </div>
+
+        <div>
+          <label for="lastName">Last name</label>
+          <input type="text" id="lastName" />
+        </div>
       </div>
     </div>
 
@@ -98,66 +319,117 @@
     </div>
 
     <div class="card hidden" id="fieldSubmitCard">
-      <button class="btn-primary" id="submitBtn" disabled>Submit field data</button>
+      <button class="btn-primary" id="submitBtn" disabled>
+        Submit field data
+      </button>
+
       <div id="statusBox"></div>
     </div>
+
   </div>
 
   <!-- LAB DATA ENTRY -->
   <div id="labArea" class="hidden">
-    <button class="back-link" data-back="lab">&larr; Back</button>
+
+    <button class="back-link" data-back="lab">
+      &larr; Back
+    </button>
 
     <div class="card">
       <h2>Sample date</h2>
-      <label for="labDate">Date these samples were collected</label>
+
+      <label for="labDate">
+        Date these samples were collected
+      </label>
+
       <input type="date" id="labDate" />
-      <button class="btn-secondary" id="showSamplesBtn">Show samples from this date</button>
+
+      <button class="btn-secondary" id="showSamplesBtn">
+        Show samples from this date
+      </button>
+
       <div class="lookup-results" id="lookupResults"></div>
     </div>
 
     <div class="card hidden" id="labRowsCard">
       <h2>Lab results</h2>
+
       <div id="labRowsContainer"></div>
-      <button class="btn-secondary" id="addLabRowBtn">+ Add sample row</button>
+
+      <button class="btn-secondary" id="addLabRowBtn">
+        + Add sample row
+      </button>
     </div>
 
     <div class="card hidden" id="labSubmitCard">
-      <button class="btn-primary" id="labSubmitBtn">Submit lab results</button>
+      <button class="btn-primary" id="labSubmitBtn">
+        Submit lab results
+      </button>
+
       <div id="labStatusBox"></div>
     </div>
+
   </div>
 
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
 <script>
+
 /* =========================================================================
-   CONFIG — edit for your organization
+   CONFIG
    ========================================================================= */
+
 const CONFIG = {
- // Your ArcGIS Online organization's portal URL
-  PORTAL_URL: "https://erau-arcgis.maps.arcgis.com",
 
-  // The Client ID of the "Application" item you register in ArcGIS Online
-  // (Content > New Item > Application. See setup instructions provided separately.)
-  CLIENT_ID: "UYOYOTbaWq18sqjW",
+  PORTAL_URL:
+    "https://erau-arcgis.maps.arcgis.com",
 
-  // Your master hosted feature layer's REST endpoint, including the layer index.
-  // Example: https://services1.arcgis.com/XXXXXXXX/arcgis/rest/services/FieldTemperatureMaster/FeatureServer/0
-  MASTER_LAYER_URL: "https://services9.arcgis.com/RYFGhJX1nW62699X/arcgis/rest/services/SampleDashboardMasterList/FeatureServer/0",
+  CLIENT_ID:
+    "UYOYOTbaWq18sqjW",
 
+  MASTER_LAYER_URL:
+    "https://services9.arcgis.com/RYFGhJX1nW62699X/arcgis/rest/services/SampleDashboardMasterList/FeatureServer/0",
 
+  /*
+   * IMPORTANT:
+   *
+   * This is restored to the same CSV date field used by your
+   * original working script.
+   */
   CSV_FIELDS: {
-    count: "Count", date: "Date1", time: "Time_EST", lat: "Lat", long: "Long",
-    surfaceTemp: "SurfaceTemp_C", depthTemp: "DepthTemp_C"
+    count: "Count",
+    date: "Date",
+    time: "Time_EST",
+    lat: "Lat",
+    long: "Long",
+    surfaceTemp: "SurfaceTemp_C",
+    depthTemp: "DepthTemp_C"
   },
 
+  /*
+   * Date is still written to Date1 in your ArcGIS layer.
+   *
+   * The CSV value is passed directly into Date1, just like
+   * the original working script.
+   */
   TARGET_FIELDS: {
-    count: "Count", date: "Date1", time: "Time_EST", lat: "Lat", long: "Long",
-    surfaceTemp: "SurfaceTemp_C", depthTemp: "DepthTemp_C",
-    surfacePH: "SurfacePH", depthPH: "DepthPH",
-    firstName: "FirstName", lastName: "LastName", sampleID: "SampleID",
-    location: "Location", algalBloom: "AlgalBloom", comments: "Comments"
+    count: "Count",
+    date: "Date1",
+    time: "Time_EST",
+    lat: "Lat",
+    long: "Long",
+    surfaceTemp: "SurfaceTemp_C",
+    depthTemp: "DepthTemp_C",
+    surfacePH: "SurfacePH",
+    depthPH: "DepthPH",
+    firstName: "FirstName",
+    lastName: "LastName",
+    sampleID: "SampleID",
+    location: "Location",
+    algalBloom: "AlgalBloom",
+    comments: "Comments"
   },
 
   LAB_FIELDS: {
@@ -170,434 +442,1703 @@ const CONFIG = {
     conductivity: "Conductivity_uScm"
   }
 };
-/* ========================================================================= */
+
+
+/* =========================================================================
+   GLOBAL VARIABLES
+   ========================================================================= */
 
 let accessToken = null;
 let parsedRows = [];
 let photoFiles = {};
 let labRowCount = 0;
 
-const redirectUri = window.location.origin + window.location.pathname;
+const redirectUri =
+  window.location.origin + window.location.pathname;
 
-/* ---------------- AUTH ---------------- */
+
+/* =========================================================================
+   AUTHENTICATION
+   ========================================================================= */
+
 function signIn() {
-  const authUrl = `${CONFIG.PORTAL_URL}/sharing/rest/oauth2/authorize` +
-    `?client_id=${encodeURIComponent(CONFIG.CLIENT_ID)}&response_type=token&expiration=1440` +
+
+  const authUrl =
+    `${CONFIG.PORTAL_URL}/sharing/rest/oauth2/authorize` +
+    `?client_id=${encodeURIComponent(CONFIG.CLIENT_ID)}` +
+    `&response_type=token` +
+    `&expiration=1440` +
     `&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
   window.location.href = authUrl;
 }
+
+
 function checkForTokenInUrl() {
-  if (window.location.hash && window.location.hash.includes("access_token")) {
-    const params = new URLSearchParams(window.location.hash.substring(1));
+
+  if (
+    window.location.hash &&
+    window.location.hash.includes("access_token")
+  ) {
+
+    const params =
+      new URLSearchParams(
+        window.location.hash.substring(1)
+      );
+
     const token = params.get("access_token");
+
     if (token) {
+
       accessToken = token;
-      history.replaceState(null, "", window.location.pathname);
+
+      history.replaceState(
+        null,
+        "",
+        window.location.pathname
+      );
+
       onSignedIn();
     }
   }
 }
+
+
 function onSignedIn() {
-  document.getElementById("signInCard").classList.add("hidden");
-  document.getElementById("landingArea").classList.remove("hidden");
+
+  document
+    .getElementById("signInCard")
+    .classList.add("hidden");
+
+  document
+    .getElementById("landingArea")
+    .classList.remove("hidden");
 }
-document.getElementById("signInBtn").addEventListener("click", signIn);
+
+
+document
+  .getElementById("signInBtn")
+  .addEventListener("click", signIn);
+
 checkForTokenInUrl();
 
-/* ---------------- View routing ---------------- */
-document.getElementById("goFieldBtn").addEventListener("click", () => switchView("fieldArea"));
-document.getElementById("goLabBtn").addEventListener("click", () => switchView("labArea"));
-document.querySelectorAll(".back-link").forEach(btn => btn.addEventListener("click", () => switchView("landingArea")));
+
+/* =========================================================================
+   VIEW ROUTING
+   ========================================================================= */
+
+document
+  .getElementById("goFieldBtn")
+  .addEventListener(
+    "click",
+    () => switchView("fieldArea")
+  );
+
+
+document
+  .getElementById("goLabBtn")
+  .addEventListener(
+    "click",
+    () => switchView("labArea")
+  );
+
+
+document
+  .querySelectorAll(".back-link")
+  .forEach(btn => {
+
+    btn.addEventListener(
+      "click",
+      () => switchView("landingArea")
+    );
+
+  });
+
 
 function switchView(id) {
-  ["landingArea", "fieldArea", "labArea"].forEach(v => document.getElementById(v).classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
+
+  [
+    "landingArea",
+    "fieldArea",
+    "labArea"
+  ].forEach(v => {
+
+    document
+      .getElementById(v)
+      .classList.add("hidden");
+
+  });
+
+  document
+    .getElementById(id)
+    .classList.remove("hidden");
 }
 
-/* ---------------- SampleID builder (shared) ---------------- */
+
+/* =========================================================================
+   SAMPLE ID
+   ========================================================================= */
+
 function buildSampleID(dateStr, count) {
-  if (!dateStr) return String(count);
-  const parts = String(dateStr).split(/[\/\-]/);
-  if (parts.length !== 3) return String(count);
-  let [m, d, y] = parts.map(p => p.trim());
-  if (y.length === 2) y = "20" + y;
-  m = m.padStart(2, "0"); d = d.padStart(2, "0");
+
+  if (!dateStr) {
+    return String(count);
+  }
+
+  const parts =
+    String(dateStr).split(/[\/\-]/);
+
+  if (parts.length !== 3) {
+    return String(count);
+  }
+
+  let [m, d, y] =
+    parts.map(p => p.trim());
+
+  if (y.length === 2) {
+    y = "20" + y;
+  }
+
+  m = m.padStart(2, "0");
+  d = d.padStart(2, "0");
+
   return `${count}_${y}${m}${d}`;
 }
-// For the lab view's <input type="date">, which returns YYYY-MM-DD directly
+
+
+/* =========================================================================
+   LAB DATE HELPER
+   ========================================================================= */
+
 function yyyymmddFromDateInput(isoDate) {
+
   return isoDate.replace(/-/g, "");
 }
 
-// Converts an M/D/YYYY (or M-D-YYYY / M/D/YY) string from the CSV into the
-// "YYYY-MM-DD" string format that ArcGIS "Date Only" fields expect.
-// (Regular Date fields want epoch-ms; Date Only fields want this plain
-// string with no time/timezone component — sending the wrong shape is why
-// AGOL was silently storing the field as null.)
-function csvDateToDateOnlyString(dateStr) {
-  if (!dateStr) return null;
-  const parts = String(dateStr).split(/[\/\-]/).map(p => p.trim());
-  if (parts.length !== 3) return null;
-  let [m, d, y] = parts;
-  if (y.length === 2) y = "20" + y;
-  m = m.padStart(2, "0");
-  d = d.padStart(2, "0");
-  return `${y}-${m}-${d}`;
-}
 
 /* =========================================================================
    FIELD DATA ENTRY
    ========================================================================= */
-document.getElementById("csvFile").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  Papa.parse(file, {
-    header: true, skipEmptyLines: true, dynamicTyping: true,
-    complete: (results) => { parsedRows = results.data; renderSampleInputs(parsedRows); },
-    error: (err) => showFieldStatus("Could not read that CSV: " + err.message, "error")
+
+document
+  .getElementById("csvFile")
+  .addEventListener("change", (e) => {
+
+    const file = e.target.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    Papa.parse(file, {
+
+      header: true,
+
+      skipEmptyLines: true,
+
+      dynamicTyping: true,
+
+      complete: (results) => {
+
+        parsedRows = results.data;
+
+        renderSampleInputs(parsedRows);
+
+      },
+
+      error: (err) => {
+
+        showFieldStatus(
+          "Could not read that CSV: " + err.message,
+          "error"
+        );
+
+      }
+
+    });
+
   });
-});
+
+
+/* =========================================================================
+   RENDER SAMPLE INPUTS
+   ========================================================================= */
 
 function renderSampleInputs(rows) {
-  const container = document.getElementById("samplesContainer");
+
+  const container =
+    document.getElementById("samplesContainer");
+
   container.innerHTML = "";
+
   photoFiles = {};
+
   const f = CONFIG.CSV_FIELDS;
 
+
   rows.forEach((row, idx) => {
-    const sampleNum = row[f.count];
-    const div = document.createElement("div");
+
+    const sampleNum =
+      row[f.count];
+
+    const div =
+      document.createElement("div");
+
     div.className = "sample";
+
     div.dataset.index = idx;
 
-    const locationBlock = idx === 0
-      ? `<label>Location</label><input type="text" data-role="location" data-index="0" placeholder="e.g. North Dock" />`
-      : `<label>Location</label>
-         <input type="text" data-role="location" data-index="${idx}" placeholder="e.g. North Dock" />
-         <div class="checkbox-row">
-           <input type="checkbox" data-role="sameLocation" data-index="${idx}" />
-           <span>Same location as first sample</span>
-         </div>`;
+
+    const locationBlock =
+      idx === 0
+
+        ? `
+          <label>Location</label>
+          <input
+            type="text"
+            data-role="location"
+            data-index="0"
+            placeholder="e.g. North Dock"
+          />
+        `
+
+        : `
+          <label>Location</label>
+
+          <input
+            type="text"
+            data-role="location"
+            data-index="${idx}"
+            placeholder="e.g. North Dock"
+          />
+
+          <div class="checkbox-row">
+
+            <input
+              type="checkbox"
+              data-role="sameLocation"
+              data-index="${idx}"
+            />
+
+            <span>
+              Same location as first sample
+            </span>
+
+          </div>
+        `;
+
 
     div.innerHTML = `
-      <div class="sample-title">Sample ${sampleNum}</div>
-      <div class="sample-meta">${row[f.date] || ""} ${row[f.time] || ""} &middot; Surface ${row[f.surfaceTemp] ?? "—"}°C / Depth ${row[f.depthTemp] ?? "—"}°C</div>
+
+      <div class="sample-title">
+        Sample ${sampleNum}
+      </div>
+
+      <div class="sample-meta">
+        ${row[f.date] || ""}
+        ${row[f.time] || ""}
+        &middot;
+        Surface ${row[f.surfaceTemp] ?? "—"}°C /
+        Depth ${row[f.depthTemp] ?? "—"}°C
+      </div>
+
 
       <div class="ph-row">
-        <input type="number" step="0.01" min="0" max="14" placeholder="Surface pH" data-role="surfacePH" data-index="${idx}" />
-        <label class="not-collected"><input type="checkbox" data-role="surfaceNotCollected" data-index="${idx}" /> Not collected</label>
+
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          max="14"
+          placeholder="Surface pH"
+          data-role="surfacePH"
+          data-index="${idx}"
+        />
+
+        <label class="not-collected">
+
+          <input
+            type="checkbox"
+            data-role="surfaceNotCollected"
+            data-index="${idx}"
+          />
+
+          Not collected
+
+        </label>
+
       </div>
+
+
       <div class="ph-row">
-        <input type="number" step="0.01" min="0" max="14" placeholder="Depth pH" data-role="depthPH" data-index="${idx}" />
-        <label class="not-collected"><input type="checkbox" data-role="depthNotCollected" data-index="${idx}" /> Not collected</label>
+
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          max="14"
+          placeholder="Depth pH"
+          data-role="depthPH"
+          data-index="${idx}"
+        />
+
+        <label class="not-collected">
+
+          <input
+            type="checkbox"
+            data-role="depthNotCollected"
+            data-index="${idx}"
+          />
+
+          Not collected
+
+        </label>
+
       </div>
+
 
       ${locationBlock}
 
-      <label>Algal bloom observed?</label>
-      <select data-role="algalBloom" data-index="${idx}">
-        <option value="">Select…</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
+
+      <label>
+        Algal bloom observed?
+      </label>
+
+      <select
+        data-role="algalBloom"
+        data-index="${idx}"
+      >
+
+        <option value="">
+          Select…
+        </option>
+
+        <option value="Yes">
+          Yes
+        </option>
+
+        <option value="No">
+          No
+        </option>
+
       </select>
 
-      <label>Comments (optional)</label>
-      <textarea data-role="comments" data-index="${idx}"></textarea>
 
-      <label>Photo (optional)</label>
-      <input type="file" accept="image/*" data-role="photo" data-index="${idx}" />
+      <label>
+        Comments (optional)
+      </label>
+
+      <textarea
+        data-role="comments"
+        data-index="${idx}"
+      ></textarea>
+
+
+      <label>
+        Photo (optional)
+      </label>
+
+      <input
+        type="file"
+        accept="image/*"
+        data-role="photo"
+        data-index="${idx}"
+      />
+
     `;
+
     container.appendChild(div);
+
   });
 
-  document.getElementById("samplesCard").classList.remove("hidden");
-  document.getElementById("fieldSubmitCard").classList.remove("hidden");
+
+  document
+    .getElementById("samplesCard")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("fieldSubmitCard")
+    .classList.remove("hidden");
+
+
   wireFieldValidation();
+
   validateFieldForm();
 }
 
+
+/* =========================================================================
+   FIELD VALIDATION
+   ========================================================================= */
+
 function wireFieldValidation() {
-  document.querySelectorAll('[data-role="surfaceNotCollected"]').forEach(cb => cb.addEventListener("change", e => {
-    const idx = e.target.dataset.index;
-    const inp = document.querySelector(`[data-role="surfacePH"][data-index="${idx}"]`);
-    inp.disabled = e.target.checked; if (e.target.checked) inp.value = "";
-    validateFieldForm();
-  }));
-  document.querySelectorAll('[data-role="depthNotCollected"]').forEach(cb => cb.addEventListener("change", e => {
-    const idx = e.target.dataset.index;
-    const inp = document.querySelector(`[data-role="depthPH"][data-index="${idx}"]`);
-    inp.disabled = e.target.checked; if (e.target.checked) inp.value = "";
-    validateFieldForm();
-  }));
-  document.querySelectorAll('[data-role="sameLocation"]').forEach(cb => cb.addEventListener("change", e => {
-    const idx = e.target.dataset.index;
-    const inp = document.querySelector(`[data-role="location"][data-index="${idx}"]`);
-    inp.disabled = e.target.checked;
-    validateFieldForm();
-  }));
-  document.querySelectorAll('input[data-role="surfacePH"], input[data-role="depthPH"], input[data-role="location"]').forEach(inp => inp.addEventListener("input", validateFieldForm));
-  document.querySelectorAll('select[data-role="algalBloom"]').forEach(sel => sel.addEventListener("change", validateFieldForm));
-  document.querySelectorAll('input[data-role="photo"]').forEach(inp => inp.addEventListener("change", e => {
-    photoFiles[e.target.dataset.index] = e.target.files[0] || null;
-  }));
-  document.getElementById("firstName").addEventListener("input", validateFieldForm);
-  document.getElementById("lastName").addEventListener("input", validateFieldForm);
+
+  document
+    .querySelectorAll(
+      '[data-role="surfaceNotCollected"]'
+    )
+    .forEach(cb => {
+
+      cb.addEventListener(
+        "change",
+        e => {
+
+          const idx =
+            e.target.dataset.index;
+
+          const inp =
+            document.querySelector(
+              `[data-role="surfacePH"][data-index="${idx}"]`
+            );
+
+          inp.disabled =
+            e.target.checked;
+
+          if (e.target.checked) {
+            inp.value = "";
+          }
+
+          validateFieldForm();
+
+        }
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      '[data-role="depthNotCollected"]'
+    )
+    .forEach(cb => {
+
+      cb.addEventListener(
+        "change",
+        e => {
+
+          const idx =
+            e.target.dataset.index;
+
+          const inp =
+            document.querySelector(
+              `[data-role="depthPH"][data-index="${idx}"]`
+            );
+
+          inp.disabled =
+            e.target.checked;
+
+          if (e.target.checked) {
+            inp.value = "";
+          }
+
+          validateFieldForm();
+
+        }
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      '[data-role="sameLocation"]'
+    )
+    .forEach(cb => {
+
+      cb.addEventListener(
+        "change",
+        e => {
+
+          const idx =
+            e.target.dataset.index;
+
+          const inp =
+            document.querySelector(
+              `[data-role="location"][data-index="${idx}"]`
+            );
+
+          inp.disabled =
+            e.target.checked;
+
+          validateFieldForm();
+
+        }
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      'input[data-role="surfacePH"], input[data-role="depthPH"], input[data-role="location"]'
+    )
+    .forEach(inp => {
+
+      inp.addEventListener(
+        "input",
+        validateFieldForm
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      'select[data-role="algalBloom"]'
+    )
+    .forEach(sel => {
+
+      sel.addEventListener(
+        "change",
+        validateFieldForm
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(
+      'input[data-role="photo"]'
+    )
+    .forEach(inp => {
+
+      inp.addEventListener(
+        "change",
+        e => {
+
+          photoFiles[
+            e.target.dataset.index
+          ] =
+            e.target.files[0] || null;
+
+        }
+
+      );
+
+    });
+
+
+  document
+    .getElementById("firstName")
+    .addEventListener(
+      "input",
+      validateFieldForm
+    );
+
+
+  document
+    .getElementById("lastName")
+    .addEventListener(
+      "input",
+      validateFieldForm
+    );
 }
 
+
+/* =========================================================================
+   VALIDATE FIELD FORM
+   ========================================================================= */
+
 function validateFieldForm() {
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
-  let allValid = parsedRows.length > 0;
+
+  const firstName =
+    document
+      .getElementById("firstName")
+      .value
+      .trim();
+
+  const lastName =
+    document
+      .getElementById("lastName")
+      .value
+      .trim();
+
+
+  let allValid =
+    parsedRows.length > 0;
+
 
   parsedRows.forEach((_, idx) => {
-    const surfaceOk = document.querySelector(`[data-role="surfaceNotCollected"][data-index="${idx}"]`).checked ||
-      document.querySelector(`[data-role="surfacePH"][data-index="${idx}"]`).value !== "";
-    const depthOk = document.querySelector(`[data-role="depthNotCollected"][data-index="${idx}"]`).checked ||
-      document.querySelector(`[data-role="depthPH"][data-index="${idx}"]`).value !== "";
-    const locInput = document.querySelector(`[data-role="location"][data-index="${idx}"]`);
-    const sameCb = document.querySelector(`[data-role="sameLocation"][data-index="${idx}"]`);
-    const locOk = idx === 0 ? locInput.value.trim() !== "" : ((sameCb && sameCb.checked) || locInput.value.trim() !== "");
-    const bloomOk = document.querySelector(`[data-role="algalBloom"][data-index="${idx}"]`).value !== "";
-    if (!surfaceOk || !depthOk || !locOk || !bloomOk) allValid = false;
+
+    const surfaceOk =
+      document.querySelector(
+        `[data-role="surfaceNotCollected"][data-index="${idx}"]`
+      ).checked
+      ||
+      document.querySelector(
+        `[data-role="surfacePH"][data-index="${idx}"]`
+      ).value !== "";
+
+
+    const depthOk =
+      document.querySelector(
+        `[data-role="depthNotCollected"][data-index="${idx}"]`
+      ).checked
+      ||
+      document.querySelector(
+        `[data-role="depthPH"][data-index="${idx}"]`
+      ).value !== "";
+
+
+    const locInput =
+      document.querySelector(
+        `[data-role="location"][data-index="${idx}"]`
+      );
+
+
+    const sameCb =
+      document.querySelector(
+        `[data-role="sameLocation"][data-index="${idx}"]`
+      );
+
+
+    const locOk =
+      idx === 0
+        ? locInput.value.trim() !== ""
+        : (
+            (sameCb && sameCb.checked)
+            ||
+            locInput.value.trim() !== ""
+          );
+
+
+    const bloomOk =
+      document.querySelector(
+        `[data-role="algalBloom"][data-index="${idx}"]`
+      ).value !== "";
+
+
+    if (
+      !surfaceOk ||
+      !depthOk ||
+      !locOk ||
+      !bloomOk
+    ) {
+      allValid = false;
+    }
+
   });
 
-  const valid = firstName && lastName && allValid;
-  document.getElementById("submitBtn").disabled = !valid;
+
+  const valid =
+    firstName &&
+    lastName &&
+    allValid;
+
+
+  document
+    .getElementById("submitBtn")
+    .disabled = !valid;
+
+
   return valid;
 }
 
-document.getElementById("submitBtn").addEventListener("click", submitFieldData);
+
+/* =========================================================================
+   SUBMIT FIELD DATA
+   ========================================================================= */
+
+document
+  .getElementById("submitBtn")
+  .addEventListener(
+    "click",
+    submitFieldData
+  );
+
 
 async function submitFieldData() {
-  if (!validateFieldForm()) return;
-  if (!accessToken) { showFieldStatus("You're not signed in.", "error"); return; }
 
-  const firstName = document.getElementById("firstName").value.trim();
-  const lastName = document.getElementById("lastName").value.trim();
-  const csvF = CONFIG.CSV_FIELDS;
-  const tgt = CONFIG.TARGET_FIELDS;
-  const firstLocation = document.querySelector('[data-role="location"][data-index="0"]').value.trim();
+  if (!validateFieldForm()) {
+    return;
+  }
 
-  const features = parsedRows.map((row, idx) => {
-    const surfaceInput = document.querySelector(`[data-role="surfacePH"][data-index="${idx}"]`);
-    const depthInput = document.querySelector(`[data-role="depthPH"][data-index="${idx}"]`);
-    const sameCb = document.querySelector(`[data-role="sameLocation"][data-index="${idx}"]`);
-    const locInput = document.querySelector(`[data-role="location"][data-index="${idx}"]`);
-    const location = (idx > 0 && sameCb && sameCb.checked) ? firstLocation : locInput.value.trim();
 
-    return {
-      geometry: { x: parseFloat(row[csvF.long]), y: parseFloat(row[csvF.lat]), spatialReference: { wkid: 4326 } },
-      attributes: {
-        [tgt.count]: row[csvF.count],
-        [tgt.date]: csvDateToDateOnlyString(row[csvF.date]),
-        [tgt.time]: row[csvF.time],
-        [tgt.lat]: row[csvF.lat],
-        [tgt.long]: row[csvF.long],
-        [tgt.surfaceTemp]: row[csvF.surfaceTemp],
-        [tgt.depthTemp]: row[csvF.depthTemp],
-        [tgt.surfacePH]: surfaceInput.disabled ? null : parseFloat(surfaceInput.value),
-        [tgt.depthPH]: depthInput.disabled ? null : parseFloat(depthInput.value),
-        [tgt.firstName]: firstName,
-        [tgt.lastName]: lastName,
-        [tgt.sampleID]: buildSampleID(row[csvF.date], row[csvF.count]),
-        [tgt.location]: location,
-        [tgt.algalBloom]: document.querySelector(`[data-role="algalBloom"][data-index="${idx}"]`).value,
-        [tgt.comments]: document.querySelector(`[data-role="comments"][data-index="${idx}"]`).value.trim()
-      }
-    };
-  });
+  if (!accessToken) {
 
-  showFieldStatus("Submitting " + features.length + " sample(s)...", "info");
-  document.getElementById("submitBtn").disabled = true;
+    showFieldStatus(
+      "You're not signed in.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  const firstName =
+    document
+      .getElementById("firstName")
+      .value
+      .trim();
+
+
+  const lastName =
+    document
+      .getElementById("lastName")
+      .value
+      .trim();
+
+
+  const csvF =
+    CONFIG.CSV_FIELDS;
+
+
+  const tgt =
+    CONFIG.TARGET_FIELDS;
+
+
+  const firstLocation =
+    document
+      .querySelector(
+        '[data-role="location"][data-index="0"]'
+      )
+      .value
+      .trim();
+
+
+  const features =
+    parsedRows.map((row, idx) => {
+
+      const surfaceInput =
+        document.querySelector(
+          `[data-role="surfacePH"][data-index="${idx}"]`
+        );
+
+
+      const depthInput =
+        document.querySelector(
+          `[data-role="depthPH"][data-index="${idx}"]`
+        );
+
+
+      const sameCb =
+        document.querySelector(
+          `[data-role="sameLocation"][data-index="${idx}"]`
+        );
+
+
+      const locInput =
+        document.querySelector(
+          `[data-role="location"][data-index="${idx}"]`
+        );
+
+
+      const location =
+        (
+          idx > 0 &&
+          sameCb &&
+          sameCb.checked
+        )
+          ? firstLocation
+          : locInput.value.trim();
+
+
+      return {
+
+        geometry: {
+
+          x: parseFloat(
+            row[csvF.long]
+          ),
+
+          y: parseFloat(
+            row[csvF.lat]
+          ),
+
+          spatialReference: {
+            wkid: 4326
+          }
+
+        },
+
+
+        attributes: {
+
+          [tgt.count]:
+            row[csvF.count],
+
+          /*
+           * IMPORTANT:
+           *
+           * This is the same date handling as
+           * your original working script.
+           *
+           * No conversion.
+           * No Date object.
+           * No YYYY-MM-DD conversion.
+           *
+           * The CSV Date value is sent directly
+           * to the Date1 target field.
+           */
+          [tgt.date]:
+            row[csvF.date],
+
+          [tgt.time]:
+            row[csvF.time],
+
+          [tgt.lat]:
+            row[csvF.lat],
+
+          [tgt.long]:
+            row[csvF.long],
+
+          [tgt.surfaceTemp]:
+            row[csvF.surfaceTemp],
+
+          [tgt.depthTemp]:
+            row[csvF.depthTemp],
+
+          [tgt.surfacePH]:
+            surfaceInput.disabled
+              ? null
+              : parseFloat(surfaceInput.value),
+
+          [tgt.depthPH]:
+            depthInput.disabled
+              ? null
+              : parseFloat(depthInput.value),
+
+          [tgt.firstName]:
+            firstName,
+
+          [tgt.lastName]:
+            lastName,
+
+          [tgt.sampleID]:
+            buildSampleID(
+              row[csvF.date],
+              row[csvF.count]
+            ),
+
+          [tgt.location]:
+            location,
+
+          [tgt.algalBloom]:
+            document.querySelector(
+              `[data-role="algalBloom"][data-index="${idx}"]`
+            ).value,
+
+          [tgt.comments]:
+            document.querySelector(
+              `[data-role="comments"][data-index="${idx}"]`
+            ).value.trim()
+
+        }
+
+      };
+
+    });
+
+
+  showFieldStatus(
+    "Submitting " +
+    features.length +
+    " sample(s)...",
+    "info"
+  );
+
+
+  document
+    .getElementById("submitBtn")
+    .disabled = true;
+
 
   try {
-    const resp = await fetch(`${CONFIG.MASTER_LAYER_URL}/addFeatures`, {
-      method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ f: "json", token: accessToken, features: JSON.stringify(features) })
-    });
-    const data = await resp.json();
-    if (data.error) { showFieldStatus("Server error: " + data.error.message, "error"); document.getElementById("submitBtn").disabled = false; return; }
 
-    const results = data.addResults || [];
-    const failed = results.filter(r => !r.success);
+    const resp =
+      await fetch(
+        `${CONFIG.MASTER_LAYER_URL}/addFeatures`,
+        {
+          method: "POST",
 
-    // Upload any attached photos now that we have real ObjectIDs
-    for (let idx = 0; idx < results.length; idx++) {
-      if (results[idx].success && photoFiles[idx]) {
-        await uploadAttachment(results[idx].objectId, photoFiles[idx]);
-      }
+          headers: {
+            "Content-Type":
+              "application/x-www-form-urlencoded"
+          },
+
+          body:
+            new URLSearchParams({
+
+              f: "json",
+
+              token: accessToken,
+
+              features:
+                JSON.stringify(features)
+
+            })
+
+        }
+      );
+
+
+    const data =
+      await resp.json();
+
+
+    if (data.error) {
+
+      showFieldStatus(
+        "Server error: " +
+        data.error.message,
+        "error"
+      );
+
+      document
+        .getElementById("submitBtn")
+        .disabled = false;
+
+      return;
     }
+
+
+    const results =
+      data.addResults || [];
+
+
+    const failed =
+      results.filter(
+        r => !r.success
+      );
+
+
+    /*
+     * Upload attached photos after
+     * ObjectIDs are returned.
+     */
+    for (
+      let idx = 0;
+      idx < results.length;
+      idx++
+    ) {
+
+      if (
+        results[idx].success &&
+        photoFiles[idx]
+      ) {
+
+        await uploadAttachment(
+          results[idx].objectId,
+          photoFiles[idx]
+        );
+
+      }
+
+    }
+
 
     if (failed.length > 0) {
-      showFieldStatus(`Added ${results.length - failed.length} of ${results.length}. ${failed.length} failed — check field names in CONFIG match your layer.`, "error");
+
+      showFieldStatus(
+        `Added ${
+          results.length - failed.length
+        } of ${
+          results.length
+        }. ${
+          failed.length
+        } failed — check field names in CONFIG match your layer.`,
+        "error"
+      );
+
     } else {
-      showFieldStatus(`All ${results.length} samples added successfully.`, "success");
+
+      showFieldStatus(
+        `All ${
+          results.length
+        } samples added successfully.`,
+        "success"
+      );
+
       resetFieldForm();
+
     }
+
   } catch (err) {
-    showFieldStatus("Network error: " + err.message, "error");
-    document.getElementById("submitBtn").disabled = false;
+
+    showFieldStatus(
+      "Network error: " +
+      err.message,
+      "error"
+    );
+
+    document
+      .getElementById("submitBtn")
+      .disabled = false;
+
   }
 }
 
-async function uploadAttachment(objectId, file) {
-  const formData = new FormData();
-  formData.append("attachment", file);
-  formData.append("f", "json");
-  formData.append("token", accessToken);
+
+/* =========================================================================
+   PHOTO ATTACHMENTS
+   ========================================================================= */
+
+async function uploadAttachment(
+  objectId,
+  file
+) {
+
+  const formData =
+    new FormData();
+
+
+  formData.append(
+    "attachment",
+    file
+  );
+
+
+  formData.append(
+    "f",
+    "json"
+  );
+
+
+  formData.append(
+    "token",
+    accessToken
+  );
+
+
   try {
-    await fetch(`${CONFIG.MASTER_LAYER_URL}/${objectId}/addAttachment`, { method: "POST", body: formData });
+
+    await fetch(
+      `${CONFIG.MASTER_LAYER_URL}/${objectId}/addAttachment`,
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
   } catch (err) {
-    console.error("Photo upload failed for object " + objectId, err);
+
+    console.error(
+      "Photo upload failed for object " +
+      objectId,
+      err
+    );
+
   }
 }
 
-function showFieldStatus(msg, type) {
-  document.getElementById("statusBox").innerHTML = `<div class="status ${type}">${msg}</div>`;
+
+/* =========================================================================
+   FIELD STATUS
+   ========================================================================= */
+
+function showFieldStatus(
+  msg,
+  type
+) {
+
+  document
+    .getElementById("statusBox")
+    .innerHTML =
+      `<div class="status ${type}">${msg}</div>`;
 }
+
+
+/* =========================================================================
+   RESET FIELD FORM
+   ========================================================================= */
+
 function resetFieldForm() {
-  parsedRows = []; photoFiles = {};
-  document.getElementById("csvFile").value = "";
-  document.getElementById("samplesContainer").innerHTML = "";
-  document.getElementById("samplesCard").classList.add("hidden");
-  document.getElementById("submitBtn").disabled = true;
+
+  parsedRows = [];
+
+  photoFiles = {};
+
+
+  document
+    .getElementById("csvFile")
+    .value = "";
+
+
+  document
+    .getElementById("samplesContainer")
+    .innerHTML = "";
+
+
+  document
+    .getElementById("samplesCard")
+    .classList.add("hidden");
+
+
+  document
+    .getElementById("submitBtn")
+    .disabled = true;
 }
+
 
 /* =========================================================================
    LAB DATA ENTRY
    ========================================================================= */
-document.getElementById("addLabRowBtn").addEventListener("click", addLabRow);
-document.getElementById("showSamplesBtn").addEventListener("click", showSamplesForDate);
-document.getElementById("labSubmitBtn").addEventListener("click", submitLabData);
+
+document
+  .getElementById("addLabRowBtn")
+  .addEventListener(
+    "click",
+    addLabRow
+  );
+
+
+document
+  .getElementById("showSamplesBtn")
+  .addEventListener(
+    "click",
+    showSamplesForDate
+  );
+
+
+document
+  .getElementById("labSubmitBtn")
+  .addEventListener(
+    "click",
+    submitLabData
+  );
+
+
+/* =========================================================================
+   ADD LAB ROW
+   ========================================================================= */
 
 function addLabRow() {
-  const idx = labRowCount++;
-  const lf = CONFIG.LAB_FIELDS;
-  const div = document.createElement("div");
+
+  const idx =
+    labRowCount++;
+
+
+  const lf =
+    CONFIG.LAB_FIELDS;
+
+
+  const div =
+    document.createElement("div");
+
+
   div.className = "sample";
+
   div.dataset.index = idx;
+
+
   div.innerHTML = `
-    <label>Sample number</label>
-    <input type="number" min="1" data-role="labCount" data-index="${idx}" placeholder="e.g. 1" />
 
-    <label>Chlorophyll A (µg/L)</label>
-    <input type="number" step="0.01" data-role="${lf.chlorophyllA}" data-index="${idx}" />
+    <label>
+      Sample number
+    </label>
 
-    <label>Total Algae (cells/mL)</label>
-    <input type="number" step="0.01" data-role="${lf.totalAlgae}" data-index="${idx}" />
+    <input
+      type="number"
+      min="1"
+      data-role="labCount"
+      data-index="${idx}"
+      placeholder="e.g. 1"
+    />
 
-    <label>Cyanobacteria (cells/mL)</label>
-    <input type="number" step="0.01" data-role="${lf.cyanobacteria}" data-index="${idx}" />
 
-    <label>Dissolved Inorganic Phosphorus (mg/L)</label>
-    <input type="number" step="0.01" data-role="${lf.dip}" data-index="${idx}" />
+    <label>
+      Chlorophyll A (µg/L)
+    </label>
 
-    <label>Dissolved Inorganic Nitrogen (mg/L)</label>
-    <input type="number" step="0.01" data-role="${lf.din}" data-index="${idx}" />
+    <input
+      type="number"
+      step="0.01"
+      data-role="${lf.chlorophyllA}"
+      data-index="${idx}"
+    />
 
-    <label>Turbidity (NTU)</label>
-    <input type="number" step="0.01" data-role="${lf.turbidity}" data-index="${idx}" />
 
-    <label>Electrical Conductivity (µS/cm)</label>
-    <input type="number" step="0.01" data-role="${lf.conductivity}" data-index="${idx}" />
+    <label>
+      Total Algae (cells/mL)
+    </label>
+
+    <input
+      type="number"
+      step="0.01"
+      data-role="${lf.totalAlgae}"
+      data-index="${idx}"
+    />
+
+
+    <label>
+      Cyanobacteria (cells/mL)
+    </label>
+
+    <input
+      type="number"
+      step="0.01"
+      data-role="${lf.cyanobacteria}"
+      data-index="${idx}"
+    />
+
+
+    <label>
+      Dissolved Inorganic Phosphorus (mg/L)
+    </label>
+
+    <input
+      type="number"
+      step="0.01"
+      data-role="${lf.dip}"
+      data-index="${idx}"
+    />
+
+
+    <label>
+      Dissolved Inorganic Nitrogen (mg/L)
+    </label>
+
+    <input
+      type="number"
+      step="0.01"
+      data-role="${lf.din}"
+      data-index="${idx}"
+    />
+
+
+    <label>
+      Turbidity (NTU)
+    </label>
+
+    <input
+      type="number"
+      step="0.01"
+      data-role="${lf.turbidity}"
+      data-index="${idx}"
+    />
+
+
+    <label>
+      Electrical Conductivity (µS/cm)
+    </label>
+
+    <input
+      type="number"
+      step="0.01"
+      data-role="${lf.conductivity}"
+      data-index="${idx}"
+    />
+
   `;
-  document.getElementById("labRowsContainer").appendChild(div);
-  document.getElementById("labRowsCard").classList.remove("hidden");
-  document.getElementById("labSubmitCard").classList.remove("hidden");
+
+
+  document
+    .getElementById("labRowsContainer")
+    .appendChild(div);
+
+
+  document
+    .getElementById("labRowsCard")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("labSubmitCard")
+    .classList.remove("hidden");
 }
+
+
+/* =========================================================================
+   SHOW SAMPLES FOR LAB DATE
+   ========================================================================= */
 
 async function showSamplesForDate() {
-  const dateVal = document.getElementById("labDate").value;
-  const box = document.getElementById("lookupResults");
-  if (!dateVal) { box.innerHTML = `<div class="status error">Pick a date first.</div>`; return; }
 
-  const yyyymmdd = yyyymmddFromDateInput(dateVal);
-  box.innerHTML = `<div class="status info">Looking up samples…</div>`;
+  const dateVal =
+    document
+      .getElementById("labDate")
+      .value;
 
-  try {
-    const url = `${CONFIG.MASTER_LAYER_URL}/query?where=${encodeURIComponent(`SampleID LIKE '%_${yyyymmdd}'`)}&outFields=SampleID,Location,AlgalBloom,SurfacePH,DepthPH&f=json&token=${accessToken}`;
-    const resp = await fetch(url);
-    const data = await resp.json();
 
-    if (!data.features || data.features.length === 0) {
-      box.innerHTML = `<div class="status info">No samples found for that date yet — make sure field data was uploaded first.</div>`;
-      return;
-    }
-    let html = `<div class="status success">${data.features.length} sample(s) found:</div>`;
-    data.features.forEach(f => {
-      const a = f.attributes;
-      html += `<div class="lookup-row"><strong>${a.SampleID}</strong> — ${a.Location || "no location"} · Bloom: ${a.AlgalBloom || "—"} · Surface pH: ${a.SurfacePH ?? "—"} · Depth pH: ${a.DepthPH ?? "—"}</div>`;
-    });
-    box.innerHTML = html;
-  } catch (err) {
-    box.innerHTML = `<div class="status error">Lookup failed: ${err.message}</div>`;
-  }
-}
+  const box =
+    document
+      .getElementById("lookupResults");
 
-async function submitLabData() {
-  const dateVal = document.getElementById("labDate").value;
-  const statusBox = document.getElementById("labStatusBox");
-  if (!dateVal) { statusBox.innerHTML = `<div class="status error">Pick a sample date first.</div>`; return; }
-  if (!accessToken) { statusBox.innerHTML = `<div class="status error">You're not signed in.</div>`; return; }
 
-  const yyyymmdd = yyyymmddFromDateInput(dateVal);
-  const lf = CONFIG.LAB_FIELDS;
-  const rows = document.querySelectorAll("#labRowsContainer .sample");
+  if (!dateVal) {
 
-  if (rows.length === 0) { statusBox.innerHTML = `<div class="status error">Add at least one sample row.</div>`; return; }
+    box.innerHTML =
+      `<div class="status error">
+        Pick a date first.
+      </div>`;
 
-  statusBox.innerHTML = `<div class="status info">Matching and submitting ${rows.length} row(s)...</div>`;
-  document.getElementById("labSubmitBtn").disabled = true;
-
-  const updates = [];
-  const notFound = [];
-
-  for (const row of rows) {
-    const idx = row.dataset.index;
-    const countVal = document.querySelector(`[data-role="labCount"][data-index="${idx}"]`).value;
-    if (!countVal) continue;
-    const sampleID = `${countVal}_${yyyymmdd}`;
-
-    // Find the matching existing feature
-    const queryUrl = `${CONFIG.MASTER_LAYER_URL}/query?where=${encodeURIComponent(`SampleID='${sampleID}'`)}&outFields=OBJECTID&f=json&token=${accessToken}`;
-    const resp = await fetch(queryUrl);
-    const data = await resp.json();
-
-    if (!data.features || data.features.length === 0) {
-      notFound.push(sampleID);
-      continue;
-    }
-
-    const objectId = data.features[0].attributes.OBJECTID;
-    const attributes = { OBJECTID: objectId };
-    Object.values(lf).forEach(fieldName => {
-      const input = row.querySelector(`[data-role="${fieldName}"]`);
-      if (input && input.value !== "") attributes[fieldName] = parseFloat(input.value);
-    });
-    updates.push({ attributes });
-  }
-
-  if (updates.length === 0) {
-    statusBox.innerHTML = `<div class="status error">No matching samples found. Check the date and sample numbers, or confirm field data was uploaded first. Missing: ${notFound.join(", ")}</div>`;
-    document.getElementById("labSubmitBtn").disabled = false;
     return;
   }
 
+
+  const yyyymmdd =
+    yyyymmddFromDateInput(
+      dateVal
+    );
+
+
+  box.innerHTML =
+    `<div class="status info">
+      Looking up samples…
+    </div>`;
+
+
   try {
-    const resp = await fetch(`${CONFIG.MASTER_LAYER_URL}/applyEdits`, {
-      method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ f: "json", token: accessToken, updates: JSON.stringify(updates) })
+
+    const url =
+      `${CONFIG.MASTER_LAYER_URL}/query` +
+      `?where=${encodeURIComponent(
+        `SampleID LIKE '%_${yyyymmdd}'`
+      )}` +
+      `&outFields=SampleID,Location,AlgalBloom,SurfacePH,DepthPH` +
+      `&f=json` +
+      `&token=${accessToken}`;
+
+
+    const resp =
+      await fetch(url);
+
+
+    const data =
+      await resp.json();
+
+
+    if (
+      !data.features ||
+      data.features.length === 0
+    ) {
+
+      box.innerHTML =
+        `<div class="status info">
+          No samples found for that date yet —
+          make sure field data was uploaded first.
+        </div>`;
+
+      return;
+    }
+
+
+    let html =
+      `<div class="status success">
+        ${data.features.length} sample(s) found:
+      </div>`;
+
+
+    data.features.forEach(f => {
+
+      const a =
+        f.attributes;
+
+
+      html += `
+        <div class="lookup-row">
+          <strong>${a.SampleID}</strong>
+          —
+          ${a.Location || "no location"}
+          · Bloom:
+          ${a.AlgalBloom || "—"}
+          · Surface pH:
+          ${a.SurfacePH ?? "—"}
+          · Depth pH:
+          ${a.DepthPH ?? "—"}
+        </div>
+      `;
+
     });
-    const data = await resp.json();
-    const failed = (data.updateResults || []).filter(r => !r.success);
-    let msg = `Updated ${updates.length - failed.length} of ${updates.length} sample(s).`;
-    if (notFound.length > 0) msg += ` Not found: ${notFound.join(", ")}.`;
-    statusBox.innerHTML = `<div class="status ${failed.length > 0 || notFound.length > 0 ? "error" : "success"}">${msg}</div>`;
+
+
+    box.innerHTML = html;
+
   } catch (err) {
-    statusBox.innerHTML = `<div class="status error">Network error: ${err.message}</div>`;
+
+    box.innerHTML =
+      `<div class="status error">
+        Lookup failed:
+        ${err.message}
+      </div>`;
+
   }
-  document.getElementById("labSubmitBtn").disabled = false;
 }
+
+
+/* =========================================================================
+   SUBMIT LAB DATA
+   ========================================================================= */
+
+async function submitLabData() {
+
+  const dateVal =
+    document
+      .getElementById("labDate")
+      .value;
+
+
+  const statusBox =
+    document
+      .getElementById("labStatusBox");
+
+
+  if (!dateVal) {
+
+    statusBox.innerHTML =
+      `<div class="status error">
+        Pick a sample date first.
+      </div>`;
+
+    return;
+  }
+
+
+  if (!accessToken) {
+
+    statusBox.innerHTML =
+      `<div class="status error">
+        You're not signed in.
+      </div>`;
+
+    return;
+  }
+
+
+  const yyyymmdd =
+    yyyymmddFromDateInput(
+      dateVal
+    );
+
+
+  const lf =
+    CONFIG.LAB_FIELDS;
+
+
+  const rows =
+    document.querySelectorAll(
+      "#labRowsContainer .sample"
+    );
+
+
+  if (rows.length === 0) {
+
+    statusBox.innerHTML =
+      `<div class="status error">
+        Add at least one sample row.
+      </div>`;
+
+    return;
+  }
+
+
+  statusBox.innerHTML =
+    `<div class="status info">
+      Matching and submitting
+      ${rows.length} row(s)...
+    </div>`;
+
+
+  document
+    .getElementById("labSubmitBtn")
+    .disabled = true;
+
+
+  const updates = [];
+
+  const notFound = [];
+
+
+  for (const row of rows) {
+
+    const idx =
+      row.dataset.index;
+
+
+    const countVal =
+      document.querySelector(
+        `[data-role="labCount"][data-index="${idx}"]`
+      ).value;
+
+
+    if (!countVal) {
+      continue;
+    }
+
+
+    const sampleID =
+      `${countVal}_${yyyymmdd}`;
+
+
+    /*
+     * Find the matching existing feature.
+     */
+    const queryUrl =
+      `${CONFIG.MASTER_LAYER_URL}/query` +
+      `?where=${encodeURIComponent(
+        `SampleID='${sampleID}'`
+      )}` +
+      `&outFields=OBJECTID` +
+      `&f=json` +
+      `&token=${accessToken}`;
+
+
+    const resp =
+      await fetch(queryUrl);
+
+
+    const data =
+      await resp.json();
+
+
+    if (
+      !data.features ||
+      data.features.length === 0
+    ) {
+
+      notFound.push(sampleID);
+
+      continue;
+    }
+
+
+    const objectId =
+      data
+        .features[0]
+        .attributes
+        .OBJECTID;
+
+
+    const attributes = {
+      OBJECTID: objectId
+    };
+
+
+    Object
+      .values(lf)
+      .forEach(fieldName => {
+
+        const input =
+          row.querySelector(
+            `[data-role="${fieldName}"]`
+          );
+
+
+        if (
+          input &&
+          input.value !== ""
+        ) {
+
+          attributes[fieldName] =
+            parseFloat(input.value);
+
+        }
+
+      });
+
+
+    updates.push({
+      attributes
+    });
+
+  }
+
+
+  if (updates.length === 0) {
+
+    statusBox.innerHTML =
+      `<div class="status error">
+        No matching samples found.
+        Check the date and sample numbers,
+        or confirm field data was uploaded first.
+        Missing:
+        ${notFound.join(", ")}
+      </div>`;
+
+
+    document
+      .getElementById("labSubmitBtn")
+      .disabled = false;
+
+
+    return;
+  }
+
+
+  try {
+
+    const resp =
+      await fetch(
+        `${CONFIG.MASTER_LAYER_URL}/applyEdits`,
+        {
+
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/x-www-form-urlencoded"
+          },
+
+          body:
+            new URLSearchParams({
+
+              f: "json",
+
+              token: accessToken,
+
+              updates:
+                JSON.stringify(updates)
+
+            })
+
+        }
+      );
+
+
+    const data =
+      await resp.json();
+
+
+    const failed =
+      (data.updateResults || [])
+        .filter(r => !r.success);
+
+
+    let msg =
+      `Updated ${
+        updates.length - failed.length
+      } of ${
+        updates.length
+      } sample(s).`;
+
+
+    if (notFound.length > 0) {
+
+      msg +=
+        ` Not found:
+        ${notFound.join(", ")}.`;
+
+    }
+
+
+    statusBox.innerHTML =
+      `<div class="status ${
+        failed.length > 0 ||
+        notFound.length > 0
+          ? "error"
+          : "success"
+      }">
+        ${msg}
+      </div>`;
+
+
+  } catch (err) {
+
+    statusBox.innerHTML =
+      `<div class="status error">
+        Network error:
+        ${err.message}
+      </div>`;
+
+  }
+
+
+  document
+    .getElementById("labSubmitBtn")
+    .disabled = false;
+}
+
 </script>
 
 </body>
